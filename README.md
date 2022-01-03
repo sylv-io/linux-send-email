@@ -1,6 +1,10 @@
 # linux-send-email
 git-format-patch archive for linux upstreaming
 
+## Guides
+
+* [Creating and Editing patches for the Linux Kernel with git](https://carlosedp.medium.com/creating-and-editing-patches-for-the-linux-kernel-with-git-91feda0c1534)
+
 ## Commands
 
 wip
