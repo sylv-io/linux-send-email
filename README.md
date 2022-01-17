@@ -33,5 +33,5 @@ scripts/get_maintainer.pl --no-rolestats $DIR/$SET/$PATCH_FILE
 vim $DIR/$SET/$PATCH_FILE
 
 # send patches
-git send-email $DIR/$SET/$VERSION-* --to $MAILING_LIST --to linux-kernel@vger.kernel.org output/$SET/$VERSION-*
+git send-email $DIR/$SET/$VERSION-* --to $MAILING_LIST
 ```
