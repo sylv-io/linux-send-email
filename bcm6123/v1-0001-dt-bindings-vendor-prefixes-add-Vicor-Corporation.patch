@@ -1,0 +1,36 @@
+From 58d2c7501edf746f3677681327c283fc3faaf872 Mon Sep 17 00:00:00 2001
+Message-Id: <58d2c7501edf746f3677681327c283fc3faaf872.1642434222.git.sylv@sylv.io>
+In-Reply-To: <cover.1642434222.git.sylv@sylv.io>
+References: <cover.1642434222.git.sylv@sylv.io>
+From: Marcello Sylvester Bauer <sylv@sylv.io>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Date: Fri, 17 Dec 2021 13:43:31 +0100
+Subject: [PATCH v1 1/4] dt-bindings: vendor-prefixes: add Vicor Corporation
+
+Add vendor prefix for Vicor Corporation.
+
+Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+---
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 66d6432fd781..8a2a205d6d34 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -1273,6 +1273,8 @@ patternProperties:
+   "^vdl,.*":
+     description: Van der Laan b.v.
+   "^via,.*":
++    description: Vicor Corporation
++  "^vicor,.*":
+     description: VIA Technologies, Inc.
+   "^videostrong,.*":
+     description: Videostrong Technology Co., Ltd.
+-- 
+2.33.1
+

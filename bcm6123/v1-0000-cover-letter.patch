@@ -1,0 +1,34 @@
+From db9cb6a43de9b248b76f815c6c173d1eefd42ad0 Mon Sep 17 00:00:00 2001
+Message-Id: <cover.1642434222.git.sylv@sylv.io>
+From: Marcello Sylvester Bauer <sylv@sylv.io>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: linux-kernel@vger.kernel.org
+Date: Mon, 17 Jan 2022 16:43:42 +0100
+Subject: [PATCH v1 0/4] Support bcm6123 Bus Converter
+
+Hi,
+
+This patchset adds support for BCM6123 Bus Converter from Vicor
+Corporation.
+
+Marcello Sylvester Bauer (3):
+  dt-bindings: vendor-prefixes: add Vicor Corporation
+  dt-bindings: hwmon/pmbus: Add vicor,bcm6123 Bus Converter
+  pmbus: remove trailing whitespaces
+
+Patrick Rudolph (1):
+  pmbus: Add support for bcm6123 Bus Converter
+
+ .../bindings/hwmon/pmbus/vicor,bcm6123.yaml   | 41 +++++++++
+ .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
+ drivers/hwmon/pmbus/Kconfig                   | 13 ++-
+ drivers/hwmon/pmbus/Makefile                  |  1 +
+ drivers/hwmon/pmbus/bcm6123.c                 | 90 +++++++++++++++++++
+ 5 files changed, 145 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/vicor,bcm6123.yaml
+ create mode 100644 drivers/hwmon/pmbus/bcm6123.c
+
+-- 
+2.33.1
+

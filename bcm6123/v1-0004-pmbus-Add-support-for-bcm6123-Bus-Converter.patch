@@ -1,0 +1,153 @@
+From db9cb6a43de9b248b76f815c6c173d1eefd42ad0 Mon Sep 17 00:00:00 2001
+Message-Id: <db9cb6a43de9b248b76f815c6c173d1eefd42ad0.1642434222.git.sylv@sylv.io>
+In-Reply-To: <cover.1642434222.git.sylv@sylv.io>
+References: <cover.1642434222.git.sylv@sylv.io>
+From: Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: linux-kernel@vger.kernel.org
+Date: Mon, 18 Oct 2021 18:16:16 +0200
+Subject: [PATCH v1 4/4] pmbus: Add support for bcm6123 Bus Converter
+
+BCM6123 is an Fixed-Ratio DC-DC Converter.
+
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+---
+ drivers/hwmon/pmbus/Kconfig   |  9 ++++
+ drivers/hwmon/pmbus/Makefile  |  1 +
+ drivers/hwmon/pmbus/bcm6123.c | 90 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 100 insertions(+)
+ create mode 100644 drivers/hwmon/pmbus/bcm6123.c
+
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index c96f7b7338bd..62dac90631c5 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -48,6 +48,15 @@ config SENSORS_ADM1275
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called adm1275.
+ 
++config SENSORS_BCM6123
++	tristate "Vicor BCM6123 Compatible Power Supplies"
++	help
++	  If you say yes here you get hardware monitoring support for Vicor
++	  BCM6123 Power Supplies.
++
++	  This driver can also be built as a module. If so, the module will
++	  be called bcm6123.
++
+ config SENSORS_BEL_PFE
+ 	tristate "Bel PFE Compatible Power Supplies"
+ 	help
+diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+index e5935f70c9e0..2918c2ea7bc5 100644
+--- a/drivers/hwmon/pmbus/Makefile
++++ b/drivers/hwmon/pmbus/Makefile
+@@ -7,6 +7,7 @@ obj-$(CONFIG_PMBUS)		+= pmbus_core.o
+ obj-$(CONFIG_SENSORS_PMBUS)	+= pmbus.o
+ obj-$(CONFIG_SENSORS_ADM1266)	+= adm1266.o
+ obj-$(CONFIG_SENSORS_ADM1275)	+= adm1275.o
++obj-$(CONFIG_SENSORS_BCM6123)	+= bcm6123.o
+ obj-$(CONFIG_SENSORS_BEL_PFE)	+= bel-pfe.o
+ obj-$(CONFIG_SENSORS_BPA_RS600)	+= bpa-rs600.o
+ obj-$(CONFIG_SENSORS_DELTA_AHE50DC_FAN) += delta-ahe50dc-fan.o
+diff --git a/drivers/hwmon/pmbus/bcm6123.c b/drivers/hwmon/pmbus/bcm6123.c
+new file mode 100644
+index 000000000000..78fc259bc40f
+--- /dev/null
++++ b/drivers/hwmon/pmbus/bcm6123.c
+@@ -0,0 +1,90 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Hardware monitoring driver for Infineon bcm6123
++ *
++ * Copyright (c) 2021 9elements GmbH
++ *
++ * VOUT_MODE is not supported by the device. The driver fakes VOUT linear16
++ * mode with exponent value -8 as direct mode with m=256/b=0/R=0.
++ *
++ * The device supports VOUT_PEAK, IOUT_PEAK, and TEMPERATURE_PEAK, however
++ * this driver does not currently support them.
++ */
++
++#include <linux/err.h>
++#include <linux/i2c.h>
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/pmbus.h>
++#include "pmbus.h"
++
++static struct pmbus_platform_data bcm6123_plat_data = {
++	.flags = PMBUS_NO_CAPABILITY,
++};
++
++static struct pmbus_driver_info bcm6123_info = {
++	.pages = 2,
++	.format[PSC_VOLTAGE_IN] = direct,
++	.format[PSC_VOLTAGE_OUT] = direct,
++	.format[PSC_CURRENT_IN] = direct,
++	.format[PSC_CURRENT_OUT] = direct,
++	.format[PSC_POWER] = linear,
++	.format[PSC_TEMPERATURE] = linear,
++	.m[PSC_VOLTAGE_IN] = 1,
++	.b[PSC_VOLTAGE_IN] = 0,
++	.R[PSC_VOLTAGE_IN] = 1,
++	.m[PSC_VOLTAGE_OUT] = 1,
++	.b[PSC_VOLTAGE_OUT] = 0,
++	.R[PSC_VOLTAGE_OUT] = 1,
++	.m[PSC_CURRENT_IN] = 1,
++	.b[PSC_CURRENT_IN] = 0,
++	.R[PSC_CURRENT_IN] = 3,
++	.m[PSC_CURRENT_OUT] = 1,
++	.b[PSC_CURRENT_OUT] = 0,
++	.R[PSC_CURRENT_OUT] = 2,
++	.func[0] = 0, /* Summing page without voltage readings */
++	.func[1] = PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
++	    | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
++	    | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
++	    | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
++	    | PMBUS_HAVE_IIN | PMBUS_HAVE_POUT,
++};
++
++static int bcm6123_probe(struct i2c_client *client)
++{
++	client->dev.platform_data = &bcm6123_plat_data;
++
++	return pmbus_do_probe(client, &bcm6123_info);
++}
++
++static const struct i2c_device_id bcm6123_id[] = {
++	{"bcm6123", 0},
++	{}
++};
++
++MODULE_DEVICE_TABLE(i2c, bcm6123_id);
++
++#ifdef CONFIG_OF
++static const struct of_device_id bcm6123_of_match[] = {
++	{ .compatible = "vicor,bcm6123" },
++	{ },
++};
++MODULE_DEVICE_TABLE(of, bcm6123_of_match);
++#endif
++
++/* This is the driver that will be inserted */
++static struct i2c_driver bcm6123_driver = {
++	.driver = {
++		   .name = "bcm6123",
++		   .of_match_table = of_match_ptr(bcm6123_of_match),
++		   },
++	.probe_new = bcm6123_probe,
++	.id_table = bcm6123_id,
++};
++
++module_i2c_driver(bcm6123_driver);
++
++MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
++MODULE_DESCRIPTION("PMBus driver for Vicor bcm6123");
++MODULE_LICENSE("GPL");
+-- 
+2.33.1
+
