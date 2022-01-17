@@ -19,7 +19,7 @@ BASE=hwmon-next
 MAILING_LIST=linux-hwmon@vger.kernel.org
 
 # 1. format patch
-format-patch -o $DIR/$SET --cover-letter -v $VERSION -n --thread=shallow $BASE..$HEAD
+git format-patch -o $DIR/$SET --cover-letter -v $VERSION -n --thread=shallow $BASE..$HEAD
 
 # 2. edit cover letter
 
