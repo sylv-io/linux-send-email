@@ -1,13 +1,23 @@
 # linux-send-email
 git-format-patch archive for linux upstreaming
 
-## Guides
+## Guides/Documentation
+
+### General
+
+* [Linux Kernel patch submission checklist](https://www.kernel.org/doc/html/latest/process/submit-checklist.html)
+* [Submitting Drivers For The Linux Kernel](https://www.kernel.org/doc/html/latest/process/submitting-drivers.html)
+* [Submitting patches: the essential guide to getting your code into the kernel](https://www.kernel.org/doc/html/latest/process/submitting-patches.html)
+* [Linux kernel coding style](https://www.kernel.org/doc/html/latest/process/coding-style.html)
 
 * [Creating and Editing patches for the Linux Kernel with git](https://carlosedp.medium.com/creating-and-editing-patches-for-the-linux-kernel-with-git-91feda0c1534)
 
-## Commands
+### hwmon
 
-wip
+* [LIST: Linux Hardware Monitoring](https://www.spinics.net/lists/linux-hwmon/)
+* [How to Get Your Patch Accepted Into the Hwmon Subsystem](https://www.kernel.org/doc/html/latest/hwmon/submitting-patches.html)
+
+## Commands
 
 ```
 # setup
