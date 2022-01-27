@@ -1,0 +1,44 @@
+From 5d4b331526abc252ef8c6a78af497a186c0baf87 Mon Sep 17 00:00:00 2001
+Message-Id: <cover.1643299570.git.sylv@sylv.io>
+From: Marcello Sylvester Bauer <sylv@sylv.io>
+Cc: Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Date: Thu, 27 Jan 2022 17:06:10 +0100
+Subject: [PATCH v4 0/4] Add max6639 regulator and devicetree support
+
+these patches add devicetree support for the Maxim MAX6639.
+In addition, it includes optional regulator support for the fan-supply and
+updates the URL to the datasheet.
+
+Changes in v4:
+- dt: rename rpm-range property to rpm-max
+- dt: make rpm-max, pulses-per-revolution, and pwm-polarity optional
+
+Changes in v3:
+- Remove warning if devm_regulator_get_optional returns an error.
+
+Changes in v2:
+- dt: Rename polarity to pwm-polarity.
+- Remove unused platform_data header.
+- Remove regulator enable/disable calls in pwm_store due to imbalance of
+  calls.
+- Move to strict per channel dt configuration without defaults.
+
+Marcello Sylvester Bauer (4):
+  hwmon: (max6639) Update Datasheet URL
+  hwmon: (max6639) Add regulator support
+  dt-bindings: hwmon: Add binding for max6639
+  hwmon: (max6639) Change from pdata to dt configuration
+
+ .../bindings/hwmon/maxim,max6639.yaml         | 112 +++++++++
+ Documentation/hwmon/max6639.rst               |   2 +-
+ drivers/hwmon/max6639.c                       | 224 ++++++++++++++----
+ include/linux/platform_data/max6639.h         |  15 --
+ 4 files changed, 286 insertions(+), 67 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+ delete mode 100644 include/linux/platform_data/max6639.h
+
+-- 
+2.34.1
+

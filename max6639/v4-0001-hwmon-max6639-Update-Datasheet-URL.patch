@@ -1,0 +1,36 @@
+From 76025f40d2684dc0d3ec02c8899b726b07a0e7da Mon Sep 17 00:00:00 2001
+Message-Id: <76025f40d2684dc0d3ec02c8899b726b07a0e7da.1643299570.git.sylv@sylv.io>
+In-Reply-To: <cover.1643299570.git.sylv@sylv.io>
+References: <cover.1643299570.git.sylv@sylv.io>
+From: Marcello Sylvester Bauer <sylv@sylv.io>
+Cc: Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
+Date: Thu, 23 Dec 2021 16:21:30 +0100
+Subject: [PATCH v4 1/4] hwmon: (max6639) Update Datasheet URL
+
+The old Datasheet does not exist anymore.
+
+Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+---
+ Documentation/hwmon/max6639.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/hwmon/max6639.rst b/Documentation/hwmon/max6639.rst
+index 3da54225f83c..c85d285a3489 100644
+--- a/Documentation/hwmon/max6639.rst
++++ b/Documentation/hwmon/max6639.rst
+@@ -9,7 +9,7 @@ Supported chips:
+ 
+     Addresses scanned: I2C 0x2c, 0x2e, 0x2f
+ 
+-    Datasheet: http://pdfserv.maxim-ic.com/en/ds/MAX6639.pdf
++    Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
+ 
+ Authors:
+     - He Changqing <hechangqing@semptian.com>
+-- 
+2.34.1
+
