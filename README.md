@@ -29,9 +29,11 @@ append to ~/.gitconfig
         smtpencryption = tls
         smtpserverport = 587
         chainreplyto = false
-[sendemail.linux]
-    tocmd ="`pwd`/scripts/get_maintainer.pl --nogit --nogit-fallback --norolestats --nol"
-    cccmd ="`pwd`/scripts/get_maintainer.pl --nogit --nogit-fallback --norolestats --nom"
+[sendemail.linux-hwmon]
+    to = "Guenter Roeck <linux@roeck-us.net>,Jean Delvare <jdelvare@suse.com>"
+    cc = " linux-kernel@vger.kernel.org,linux-hwmon@vger.kernel.org,Patrick Rudolph <patrick.rudolph@9elements.com>"
+    tocmd = "`pwd`/scripts/get_maintainer.pl --nogit --nogit-fallback --norolestats --nol"
+    cccmd = "`pwd`/scripts/get_maintainer.pl --nogit --nogit-fallback --norolestats --nom"
 ```
 
 ## Send Patches
@@ -53,5 +55,5 @@ git format-patch -o $DIR/$TREE/$SET/v$VERSION --cover-letter -v $VERSION -n --th
 vim $DIR/$TREE/$SET/v$VERSION/v$VERSION-0000*
 
 # send patches
-git send-email --identity=linux $DIR/$TREE/$SET/v$VERSION/
+git send-email --identity=linux-hwmon $DIR/$TREE/$SET/v$VERSION/
 ```
