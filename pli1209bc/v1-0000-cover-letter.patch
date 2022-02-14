@@ -1,0 +1,38 @@
+From 0a657d200809dedc5fdd2095fae8c0f2fceecf1f Mon Sep 17 00:00:00 2001
+Message-Id: <cover.1644597670.git.sylv@sylv.io>
+From: Marcello Sylvester Bauer <sylv@sylv.io>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: linux-kernel@vger.kernel.org
+Date: Fri, 11 Feb 2022 17:41:10 +0100
+Subject: [PATCH v1 0/4] Support pli1209bc Digital Supervisor
+
+Hi,
+
+This patch set adds support for PLI1209BC Digital Supervisor from Vicor
+Corporation. It replaces the previous submitted driver "bcm6123" [1],
+since there are multiple digital supervisors, which uses BCMs in different
+configurations [2].
+
+[1]: https://www.spinics.net/lists/linux-hwmon/msg14097.html
+[2]: https://www.spinics.net/lists/linux-hwmon/msg14123.html
+
+Marcello Sylvester Bauer (4):
+  dt-bindings: vendor-prefixes: add Vicor Corporation
+  dt-bindings:trivial-devices: Add pli1209bc
+  pmbus: Add support for pli1209bc
+  pmbus (pli1209bc): Add regulator support
+
+ .../devicetree/bindings/trivial-devices.yaml  |   2 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ Documentation/hwmon/pli1209bc.rst             |  73 ++++++++++
+ drivers/hwmon/pmbus/Kconfig                   |  17 +++
+ drivers/hwmon/pmbus/Makefile                  |   1 +
+ drivers/hwmon/pmbus/pli1209bc.c               | 137 ++++++++++++++++++
+ 6 files changed, 232 insertions(+)
+ create mode 100644 Documentation/hwmon/pli1209bc.rst
+ create mode 100644 drivers/hwmon/pmbus/pli1209bc.c
+
+-- 
+2.34.1
+

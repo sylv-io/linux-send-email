@@ -1,0 +1,104 @@
+From 0a657d200809dedc5fdd2095fae8c0f2fceecf1f Mon Sep 17 00:00:00 2001
+Message-Id: <0a657d200809dedc5fdd2095fae8c0f2fceecf1f.1644597670.git.sylv@sylv.io>
+In-Reply-To: <cover.1644597670.git.sylv@sylv.io>
+References: <cover.1644597670.git.sylv@sylv.io>
+From: Marcello Sylvester Bauer <sylv@sylv.io>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: linux-kernel@vger.kernel.org
+Date: Mon, 31 Jan 2022 10:31:37 +0100
+Subject: [PATCH v1 4/4] pmbus (pli1209bc): Add regulator support
+
+Add regulator support for PLI1209BC Digital Supervisor.
+
+Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+---
+ drivers/hwmon/pmbus/Kconfig     |  8 ++++++++
+ drivers/hwmon/pmbus/pli1209bc.c | 33 +++++++++++++++++++++++++++++++++
+ 2 files changed, 41 insertions(+)
+
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index 831db423bea0..e64e0f2d93c9 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -319,6 +319,14 @@ config SENSORS_PLI1209BC
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called pli1209bc.
+ 
++config SENSORS_PLI1209BC_REGULATOR
++	bool "Regulator support for PLI1209BC"
++	depends on SENSORS_PLI1209BC && REGULATOR
++	help
++	  If you say yes here you get regulator support for Vicor PLI1209BC
++	  Digital Supervisor.
++
++
+ config SENSORS_PM6764TR
+ 	tristate "ST PM6764TR"
+ 	help
+diff --git a/drivers/hwmon/pmbus/pli1209bc.c b/drivers/hwmon/pmbus/pli1209bc.c
+index da345eb105fd..ec479b22aa10 100644
+--- a/drivers/hwmon/pmbus/pli1209bc.c
++++ b/drivers/hwmon/pmbus/pli1209bc.c
+@@ -8,6 +8,7 @@
+ #include <linux/i2c.h>
+ #include <linux/module.h>
+ #include <linux/pmbus.h>
++#include <linux/regulator/driver.h>
+ #include "pmbus.h"
+ 
+ /*
+@@ -32,11 +33,39 @@ static int pli1209bc_read_word_data(struct i2c_client *client, int page,
+ 		if (data < 0)
+ 			return data;
+ 		return div_s64(data + 5LL, 10L);
++#if IS_ENABLED(CONFIG_SENSORS_PLI1209BC_REGULATOR)
++	/*
++	 * PMBUS_READ_VOUT and PMBUS_READ_TEMPERATURE_1 returns invalid data,
++	 * when the BCM is turned off. Since it is not possible to return
++	 * ENODATA error, return zero instead.
++	 */
++	case PMBUS_READ_VOUT:
++	case PMBUS_READ_TEMPERATURE_1:
++		data = pmbus_read_word_data(client, page, phase,
++					    PMBUS_STATUS_WORD);
++		if (data < 0)
++			return data;
++		if (data & PB_STATUS_POWER_GOOD_N)
++			return 0L;
++		return pmbus_read_word_data(client, page, phase, reg);
++#endif
+ 	default:
+ 		return -ENODATA;
+ 	}
+ }
+ 
++#if IS_ENABLED(CONFIG_SENSORS_PLI1209BC_REGULATOR)
++static const struct regulator_desc pli1209bc_reg_desc = {
++	.name = "vout2",
++	.id = 1,
++	.of_match = of_match_ptr("vout2"),
++	.regulators_node = of_match_ptr("regulators"),
++	.ops = &pmbus_regulator_ops,
++	.type = REGULATOR_VOLTAGE,
++	.owner = THIS_MODULE,
++};
++#endif
++
+ static struct pmbus_driver_info pli1209bc_info = {
+ 	.pages = 2,
+ 	.format[PSC_VOLTAGE_IN] = direct,
+@@ -64,6 +93,10 @@ static struct pmbus_driver_info pli1209bc_info = {
+ 	    | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
+ 	    | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_INPUT,
+ 	.read_word_data = pli1209bc_read_word_data,
++#if IS_ENABLED(CONFIG_SENSORS_PLI1209BC_REGULATOR)
++	.num_regulators = 1,
++	.reg_desc = &pli1209bc_reg_desc,
++#endif
+ };
+ 
+ static int pli1209bc_probe(struct i2c_client *client)
+-- 
+2.34.1
+
