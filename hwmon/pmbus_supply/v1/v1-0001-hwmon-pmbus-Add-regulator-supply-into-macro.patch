@@ -1,0 +1,36 @@
+From d3563864d03a3d3450cf00b3be05465dc506e161 Mon Sep 17 00:00:00 2001
+Message-Id: <d3563864d03a3d3450cf00b3be05465dc506e161.1645092563.git.sylv@sylv.io>
+In-Reply-To: <cover.1645092563.git.sylv@sylv.io>
+References: <cover.1645092563.git.sylv@sylv.io>
+From: Marcello Sylvester Bauer <sylv@sylv.io>
+Date: Wed, 16 Feb 2022 17:19:05 +0100
+Subject: [PATCH v1 1/1] hwmon: (pmbus) Add regulator supply into macro
+
+Add optional regulator supply into PWBUS_REGULATOR macro. This makes it
+possible to define a vin-supply in DT. Not defining a supply will only
+cause the following debug output:
+
+```
+Looking up vin-supply property in node [...] failed
+```
+
+Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+---
+ drivers/hwmon/pmbus/pmbus.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+index e0aa8aa46d8c..38f049d68d32 100644
+--- a/drivers/hwmon/pmbus/pmbus.h
++++ b/drivers/hwmon/pmbus/pmbus.h
+@@ -464,6 +464,7 @@ extern const struct regulator_ops pmbus_regulator_ops;
+ #define PMBUS_REGULATOR(_name, _id)				\
+ 	[_id] = {						\
+ 		.name = (_name # _id),				\
++		.supply_name = "vin",				\
+ 		.id = (_id),					\
+ 		.of_match = of_match_ptr(_name # _id),		\
+ 		.regulators_node = of_match_ptr("regulators"),	\
+-- 
+2.34.1
+

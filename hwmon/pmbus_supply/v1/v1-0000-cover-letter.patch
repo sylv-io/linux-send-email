@@ -1,0 +1,24 @@
+From d3563864d03a3d3450cf00b3be05465dc506e161 Mon Sep 17 00:00:00 2001
+Message-Id: <cover.1645092563.git.sylv@sylv.io>
+From: Marcello Sylvester Bauer <sylv@sylv.io>
+Date: Thu, 17 Feb 2022 11:09:23 +0100
+Subject: [PATCH v1 0/1] Add supply into PWBUS_REGULATOR macro
+
+Hi,
+
+I would like to extend the PWBUS_REGULATOR macro to be able to define
+a vin-supply. This makes it possible to regulate the voltage input
+supply and even turn it off, if not required.
+
+Thanks,
+Marcello
+
+Marcello Sylvester Bauer (1):
+  hwmon: (pmbus) Add regulator supply into macro
+
+ drivers/hwmon/pmbus/pmbus.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+-- 
+2.34.1
+
