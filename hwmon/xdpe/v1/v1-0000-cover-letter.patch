@@ -1,0 +1,25 @@
+From 6c8a38efa0b61e3ba8de023f56f59043b99e5947 Mon Sep 17 00:00:00 2001
+Message-Id: <cover.1645088804.git.sylv@sylv.io>
+From: Marcello Sylvester Bauer <sylv@sylv.io>
+Date: Thu, 17 Feb 2022 10:06:44 +0100
+Subject: [PATCH v1 0/3] Support XDPE112
+
+Add support for Infineon Multi-phase XDPE112 family regulator. The main
+difference to the XDPE122 family is it uses a different format for
+voltage out. Add the required logic to the existing  xdpe12284 driver
+accordingly.
+
+Marcello Sylvester Bauer (3):
+  dt-bindings: trivial-devices: Add xdpe11280
+  hwmon (xdpe12284): Add support for xdpe11280
+  hwmon (xdpe12284): Add regulator support
+
+ .../devicetree/bindings/trivial-devices.yaml  |  2 ++
+ Documentation/hwmon/xdpe12284.rst             | 10 +++++--
+ drivers/hwmon/pmbus/Kconfig                   |  6 ++++
+ drivers/hwmon/pmbus/xdpe12284.c               | 28 ++++++++++++++++++-
+ 4 files changed, 42 insertions(+), 4 deletions(-)
+
+-- 
+2.34.1
+
