@@ -1,0 +1,32 @@
+From f1fedce71149a2ce811bf40a2097fee5b54911bf Mon Sep 17 00:00:00 2001
+Message-Id: <f1fedce71149a2ce811bf40a2097fee5b54911bf.1644874828.git.sylv@sylv.io>
+In-Reply-To: <cover.1644874828.git.sylv@sylv.io>
+References: <cover.1644874828.git.sylv@sylv.io>
+From: Marcello Sylvester Bauer <sylv@sylv.io>
+Date: Mon, 20 Dec 2021 11:26:26 +0100
+Subject: [PATCH v3 2/4] dt-bindings:trivial-devices: Add pli1209bc
+
+Add trivial device entry for PLI1209BC Digital Supervisor from Vicor
+Corporation.
+
+Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+---
+ Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index 091792ba993e..d03d90360aa0 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -354,6 +354,8 @@ properties:
+           - ti,tps544c25
+             # Winbond/Nuvoton H/W Monitor
+           - winbond,w83793
++            # Vicor Corporation Digital Supervisor
++          - vicor,pli1209bc
+             # i2c trusted platform module (TPM)
+           - winbond,wpct301
+ 
+-- 
+2.34.1
+
