@@ -1,0 +1,31 @@
+From cbef5619ca8bb1edef32532ac22a5803248036ee Mon Sep 17 00:00:00 2001
+Message-Id: <cbef5619ca8bb1edef32532ac22a5803248036ee.1645108566.git.sylv@sylv.io>
+In-Reply-To: <cover.1645108566.git.sylv@sylv.io>
+References: <cover.1645108566.git.sylv@sylv.io>
+From: Marcello Sylvester Bauer <sylv@sylv.io>
+Date: Wed, 16 Feb 2022 17:52:27 +0100
+Subject: [PATCH v2 1/3] dt-bindings: trivial-devices: Add xdpe11280
+
+Add Infineon Multi-phase Digital Controller XDPE11280.
+
+Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+---
+ Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index 091792ba993e..8a42aea3b8a6 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -137,6 +137,8 @@ properties:
+           - infineon,slb9645tt
+             # Infineon TLV493D-A1B6 I2C 3D Magnetic Sensor
+           - infineon,tlv493d-a1b6
++            # Infineon Multi-phase Digital VR Controller xdpe11280
++          - infineon,xdpe11280
+             # Infineon Multi-phase Digital VR Controller xdpe12254
+           - infineon,xdpe12254
+             # Infineon Multi-phase Digital VR Controller xdpe12284
+-- 
+2.34.1
+

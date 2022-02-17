@@ -1,0 +1,73 @@
+From e8839386e9e5daa5f3df746003d80f613d130947 Mon Sep 17 00:00:00 2001
+Message-Id: <e8839386e9e5daa5f3df746003d80f613d130947.1645108566.git.sylv@sylv.io>
+In-Reply-To: <cover.1645108566.git.sylv@sylv.io>
+References: <cover.1645108566.git.sylv@sylv.io>
+From: Marcello Sylvester Bauer <sylv@sylv.io>
+Date: Tue, 15 Feb 2022 14:40:46 +0100
+Subject: [PATCH v2 3/3] hwmon (xdpe12284): Add regulator support
+
+Add simple on/off regulator support for xdpe12284 and
+other pmbus parts supported by the xdpe12284 driver.
+
+Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+---
+ drivers/hwmon/pmbus/Kconfig     |  6 ++++++
+ drivers/hwmon/pmbus/xdpe12284.c | 11 +++++++++++
+ 2 files changed, 17 insertions(+)
+
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index c96f7b7338bd..e0e9b67bf3eb 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -394,6 +394,12 @@ config SENSORS_XDPE122
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called xdpe12284.
+ 
++config SENSORS_XDPE122_REGULATOR
++	bool "Regulator support for XDPE122 and compatibles"
++	depends on SENSORS_XDPE122 && REGULATOR
++	help
++	  Uses the xdpe12284 or compatible as regulator.
++
+ config SENSORS_ZL6100
+ 	tristate "Intersil ZL6100 and compatibles"
+ 	help
+diff --git a/drivers/hwmon/pmbus/xdpe12284.c b/drivers/hwmon/pmbus/xdpe12284.c
+index ec947c697670..c58776ef0311 100644
+--- a/drivers/hwmon/pmbus/xdpe12284.c
++++ b/drivers/hwmon/pmbus/xdpe12284.c
+@@ -10,6 +10,8 @@
+ #include <linux/init.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
++#include <linux/regulator/driver.h>
++
+ #include "pmbus.h"
+ 
+ #define XDPE122_PROT_VR12_5MV		0x01 /* VR12.0 mode, 5-mV DAC */
+@@ -120,6 +122,11 @@ static int xdpe122_identify(struct i2c_client *client,
+ 	return 0;
+ }
+ 
++static const struct regulator_desc xdpe122_reg_desc[] = {
++	PMBUS_REGULATOR("vout", 0),
++	PMBUS_REGULATOR("vout", 1),
++};
++
+ static struct pmbus_driver_info xdpe122_info = {
+ 	.pages = XDPE122_PAGE_NUM,
+ 	.format[PSC_VOLTAGE_IN] = linear,
+@@ -138,6 +145,10 @@ static struct pmbus_driver_info xdpe122_info = {
+ 		PMBUS_HAVE_POUT | PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT,
+ 	.identify = xdpe122_identify,
+ 	.read_word_data = xdpe122_read_word_data,
++#if IS_ENABLED(CONFIG_SENSORS_XDPE122_REGULATOR)
++	.num_regulators = 2,
++	.reg_desc = xdpe122_reg_desc,
++#endif
+ };
+ 
+ static int xdpe122_probe(struct i2c_client *client)
+-- 
+2.34.1
+
