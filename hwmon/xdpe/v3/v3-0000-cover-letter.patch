@@ -1,0 +1,32 @@
+From f747eeeec852fc964151afe0aa387bbe4d7291c5 Mon Sep 17 00:00:00 2001
+Message-Id: <cover.1646157237.git.sylv@sylv.io>
+From: Marcello Sylvester Bauer <sylv@sylv.io>
+Date: Tue, 1 Mar 2022 18:53:57 +0100
+Subject: [PATCH v3 0/3] Support XDPE112
+
+Add support for Infineon Multi-phase XDPE112 family regulator. The main
+difference to the XDPE122 family is it uses a different format for
+voltage out. Add the required logic to the existing xdpe12284 driver
+accordingly.
+
+Changes in v3:
+- detect VOUT_MODE during probing
+- set xdpe122_identify/xdpe122_read_word_data only if VOUT is vid
+
+Changes in v2:
+- rebase on current hwmon-next branch
+
+Marcello Sylvester Bauer (3):
+  dt-bindings: trivial-devices: Add xdpe11280
+  hwmon (xdpe12284): Add support for xdpe11280
+  hwmon (xdpe12284): Add regulator support
+
+ .../devicetree/bindings/trivial-devices.yaml  |  2 ++
+ Documentation/hwmon/xdpe12284.rst             | 12 ++++---
+ drivers/hwmon/pmbus/Kconfig                   |  6 ++++
+ drivers/hwmon/pmbus/xdpe12284.c               | 33 +++++++++++++++++--
+ 4 files changed, 46 insertions(+), 7 deletions(-)
+
+-- 
+2.35.1
+
