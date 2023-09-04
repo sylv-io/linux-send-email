@@ -9,7 +9,6 @@ git-format-patch archive for linux upstreaming
 * [Linux Kernel patch submission checklist](https://www.kernel.org/doc/html/latest/process/submit-checklist.html)
 * [Submitting patches: the essential guide to getting your code into the kernel](https://www.kernel.org/doc/html/latest/process/submitting-patches.html)
 * [Linux kernel coding style](https://www.kernel.org/doc/html/latest/process/coding-style.html)
-
 * [Creating and Editing patches for the Linux Kernel with git](https://carlosedp.medium.com/creating-and-editing-patches-for-the-linux-kernel-with-git-91feda0c1534)
 
 ### hwmon
@@ -29,6 +28,8 @@ append to ~/.gitconfig
         smtpencryption = tls
         smtpserverport = 587
         chainreplyto = false
+        tocover = true
+        cccover = true
 [sendemail.linux]
     tocmd = "`pwd`/scripts/get_maintainer.pl --nogit --nogit-fallback --norolestats --nol"
     cccmd = "`pwd`/scripts/get_maintainer.pl --nogit --nogit-fallback --norolestats --nom"
