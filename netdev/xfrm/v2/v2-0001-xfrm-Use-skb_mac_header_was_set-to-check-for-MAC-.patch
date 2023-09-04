@@ -1,0 +1,42 @@
+From 0490137bbc24e95eadf01bed9c31eb1d0a856a21 Mon Sep 17 00:00:00 2001
+Message-ID: <0490137bbc24e95eadf01bed9c31eb1d0a856a21.1693823464.git.sylv@sylv.io>
+From: Marcello Sylvester Bauer <sylv@sylv.io>
+Date: Fri, 1 Sep 2023 17:18:42 +0200
+Subject: [PATCH v2 1/1] xfrm: Use skb_mac_header_was_set() to check for MAC
+ header presence
+
+Add skb_mac_header_was_set() in xfrm4_remove_tunnel_encap() and
+xfrm6_remove_tunnel_encap() to detect the presence of a MAC header.
+This change prevents a kernel page fault on a non-zero mac_len when the
+mac_header is not set.
+
+Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+---
+ net/xfrm/xfrm_input.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/net/xfrm/xfrm_input.c b/net/xfrm/xfrm_input.c
+index d5ee96789d4b..6d74bfa1e6e8 100644
+--- a/net/xfrm/xfrm_input.c
++++ b/net/xfrm/xfrm_input.c
+@@ -250,7 +250,7 @@ static int xfrm4_remove_tunnel_encap(struct xfrm_state *x, struct sk_buff *skb)
+
+ 	skb_reset_network_header(skb);
+ 	skb_mac_header_rebuild(skb);
+-	if (skb->mac_len)
++	if (skb->mac_len && skb_mac_header_was_set(skb))
+ 		eth_hdr(skb)->h_proto = skb->protocol;
+
+ 	err = 0;
+@@ -287,7 +287,7 @@ static int xfrm6_remove_tunnel_encap(struct xfrm_state *x, struct sk_buff *skb)
+
+ 	skb_reset_network_header(skb);
+ 	skb_mac_header_rebuild(skb);
+-	if (skb->mac_len)
++	if (skb->mac_len && skb_mac_header_was_set(skb))
+ 		eth_hdr(skb)->h_proto = skb->protocol;
+
+ 	err = 0;
+--
+2.42.0
+
