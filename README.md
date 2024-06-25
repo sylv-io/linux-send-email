@@ -40,7 +40,7 @@ append to ~/.gitconfig
 Example:
 ```
 # setup
-DIR=linux-send-email
+DIR=../linux-send-email
 TREE=hwmon
 SET=max6639
 VERSION=1
