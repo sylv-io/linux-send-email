@@ -1,0 +1,32 @@
+From 6295dbb84ca76884551df9eb157cce569377a22c Mon Sep 17 00:00:00 2001
+Message-ID: <cover.1712843963.git.sylv@sylv.io>
+To: linux-kernel@vger.kernel.org
+To: linux-usb@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Marcello Sylvester Bauer <marcello.bauer@9elements.com>
+CC: Matthias Stoeckl <matthias.stoeckl@secunet.com>
+CC: Uwe Kleine-Koenig <u.kleine-koenig@pengutronix.de>
+From: Marcello Sylvester Bauer <sylv@sylv.io>
+Date: Thu, 11 Apr 2024 15:59:23 +0200
+Subject: [PATCH v1 0/2] usb: gadget: dummy_hcd: Switch to hrtimers for better performance
+
+About 10 years ago, there was a discussion about the poor performance
+of dummy_hcd due to the use of jiffies instead of hrtimers [1].
+There was a proposal to switch to hrtimers, but the patch never made it
+into the mainline, and I cannot figure out why.
+
+This patch set brings the idea back to the mailing list with the
+intention of improving the overall performance of this driver.
+
+[1](https://linux-usb.vger.kernel.narkive.com/Fdt5oBR8/dummy-hcd-performance-correctness)
+
+Marcello Sylvester Bauer (2):
+  usb: gadget: dummy_hcd: Switch to hrtimer transfer scheduler
+  usb: gadget: dummy_hcd: Set transfer interval to 1 microframe
+
+ drivers/usb/gadget/udc/dummy_hcd.c | 37 ++++++++++++++++++------------
+ 1 file changed, 22 insertions(+), 15 deletions(-)
+
+-- 
+2.44.0
+

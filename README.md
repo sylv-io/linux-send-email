@@ -22,7 +22,7 @@ git-format-patch archive for linux upstreaming
 append to ~/.gitconfig
 ```
 [sendemail]
-        from = Marcello Sylvester Bauer <email>
+        from = Marcello Sylvester Bauer <sylv@sylv.io>
         smtpuser = sylv@sylv.io
         smtpserver = smtp.mailbox.org
         smtpencryption = tls
