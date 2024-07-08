@@ -1,0 +1,32 @@
+From f0437127d9841ad23cbd458132db7ab486475c3a Mon Sep 17 00:00:00 2001
+Message-ID: <cover.1719405791.git.marcello.bauer@9elements.com>
+To: linux-kernel@vger.kernel.org
+To: linux-usb@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: Uwe Kleine-Koenig <u.kleine-koenig@pengutronix.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: Matthias Stoeckl <matthias.stoeckl@secunet.com>
+Cc: Marcello Sylvester Bauer <marcello.bauer@9elements.com>
+From: Marcello Sylvester Bauer <marcello.bauer@9elements.com>
+Date: Wed, 26 Jun 2024 14:43:11 +0200
+Subject: [PATCH v1 0/1] usb: gadget: dummy_hcd: Fix regression due to hrtimer migration
+
+The kernel CI bots such as syzbot and intel kernel bot reported a
+regression due to the migration of the transfare scheduler from timer
+list to hrtimer. The current assumption is that this is because timer
+list uses soft interrupt context. I have not been able to reproduce the
+regression consistently. So I'm submitting this patch in the hope that
+it solves the issue.
+
+Do not apply the patch if any bot still reports the problem.
+
+Marcello Sylvester Bauer (1):
+  usb: gadget: dummy_hcd: make hrtimer expire in soft irq context
+
+ drivers/usb/gadget/udc/dummy_hcd.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+-- 
+2.45.2
+
